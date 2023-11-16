@@ -135,7 +135,7 @@ this.setVisible(false);    // TODO add your handling code here:
     }//GEN-LAST:event_jButton_egresarClienteActionPerformed
 
     private void jButton_EstadobiciActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_EstadobiciActionPerformed
-estadoBici esBici = new estadoBici();
+estadoBicicletas esBici = new estadoBicicletas();
 esBici.setVisible(true);
 this.setVisible(false);         // TODO add your handling code here:
     }//GEN-LAST:event_jButton_EstadobiciActionPerformed
