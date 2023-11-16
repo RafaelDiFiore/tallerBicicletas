@@ -27,41 +27,46 @@ public class RegistrarCliente {
             //obtener conexión a la BD
             bd cbd = new bd();
             cnx = cbd.obtenerConeccion();
-
-            String query = "INSERT INTO cliente(rut_cliente, nombre, appaterno, apmaterno,celular, tiposangre ) VALUES (?,?,?,?,?,?)";
-            PreparedStatement stmt = cnx.prepareStatement(query);
-            stmt.setString(1, cli.getRut_cliente());
-            stmt.setString(2, cli.getNombre());
-            stmt.setString(3, cli.getAppaterno());
-            stmt.setString(4, cli.getApmaterno());
-            stmt.setInt(5, cli.getCelular());
-            stmt.setString(6, cli.getTipoSangre());
-
-            stmt.executeUpdate(); //inserta donador/cliente
-            stmt.close();
+           
+     
+       
+            String query = "INSERT INTO cliente(id, nombre,apellido,celular,modadlidad,modelo,tipoServicio,valor ) VALUES (?,?,?,?,?,?,?,?,?)";
+            try (PreparedStatement stmt = cnx.prepareStatement(query)) {
+                stmt.setInt(1, cli.getId());
+                stmt.setString(2, cli.getNombre());
+                stmt.setString(3, cli.getApellido());
+                stmt.setInt(4, cli.getCelular());
+                stmt.setString(5, cli.getModalidad());
+                stmt.setString(6, cli.getModelo());
+                stmt.setString(7, cli.getTipoServicio());
+                stmt.setInt(8, cli.getCelular());
+                
+                
+                stmt.executeUpdate(); //inserta cliente
+            }
             cnx.close();
             return true;
         } catch (SQLException e) {
-            System.out.println("Error SQL al agregar Donador/Cliente" + e.getMessage());
+            System.out.println("Error SQL al agregar Cliente" + e.getMessage());
             return false;
         } catch (Exception e) {
-            System.out.println("Error al agregar Donador/Cliente" + e.getMessage());
+            System.out.println("Error al agregar Cliente" + e.getMessage());
             return false;
         }
     }
 
-    public boolean eliminarCliente(String rut_cliente) {
+    public boolean egresarCliente(int id) {
         Connection cnx = null;
         try {
 
             bd cbd = new bd();
             cnx = cbd.obtenerConeccion();
 
-            String query = "DELETE FROM cliente WHERE rut_cliente=?";
+            String query = "DELETE FROM cliente WHERE id=?";
             PreparedStatement stmt = cnx.prepareStatement(query);
-            stmt.setString(1, rut_cliente);
+            stmt.setInt(1, id);
 
-            stmt.executeUpdate(); //elimina el donador/cliente
+            stmt.executeUpdate(); //elimina el cliente
             stmt.close();
             cnx.close();
             return true;
@@ -74,8 +79,8 @@ public class RegistrarCliente {
         }
     }
 
-    //buscar todos los Donadores
-    public List<Cliente> buscarTodosClientes() {
+    //buscar todos los clientes
+    public List<Cliente> listarClientes() {
         List<Cliente> lista = new ArrayList<>();
 
         Connection cnx = null;
@@ -84,20 +89,23 @@ public class RegistrarCliente {
             bd cbd = new bd();
             cnx = cbd.obtenerConeccion();
 
-            String query = "SELECT rut_cliente, nombre, appaterno, apmaterno, celular, tiposangre FROM cliente order by rut_cliente";
+            String query = "SELECT id, nombre, apellido,celular,modadlidad,modelo,tipoServicio,valor FROM cliente order by id";
             PreparedStatement stmt = cnx.prepareStatement(query);
 
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
                 Cliente cli = new Cliente();
-
-                cli.setRut_cliente(rs.getString("rut_cliente"));
-                cli.setNombre(rs.getString("nombre"));
-                cli.setAppaterno(rs.getString("appaterno"));
-                cli.setApmaterno(rs.getString("apmaterno"));
-                cli.setCelular(rs.getInt("celular"));
-                cli.setTipoSangre(rs.getString("tiposangre"));
+                
+             stmt.setInt(1, cli.getId());
+                stmt.setString(2, cli.getNombre());
+                stmt.setString(3, cli.getApellido());
+                stmt.setInt(4, cli.getCelular());
+                stmt.setString(5, cli.getModalidad());
+                stmt.setString(6, cli.getModelo());
+                stmt.setString(7, cli.getTipoServicio());
+                stmt.setInt(8, cli.getCelular());
+                
 
                 lista.add(cli);
             }
@@ -113,7 +121,7 @@ public class RegistrarCliente {
     }
 
     //buscar por tipo de sangre
-    public List<Cliente> buscarTodosDonadoresTipoServicio(String tipoServicio) {
+    public List<Cliente> buscarTodosServicios(String tipoServicio) {
         List<Cliente> lista = new ArrayList<>();
 
         Connection cnx = null;

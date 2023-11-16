@@ -33,6 +33,7 @@ public class manualesAyuda extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        jButton_atrasCli = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -49,6 +50,13 @@ public class manualesAyuda extends javax.swing.JFrame {
         jLabel6.setText("Pista");
 
         jLabel7.setText("Manuales y ayudas");
+
+        jButton_atrasCli.setText("ATRAS");
+        jButton_atrasCli.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_atrasCliActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -67,7 +75,10 @@ public class manualesAyuda extends javax.swing.JFrame {
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(134, 134, 134)
-                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButton_atrasCli)))
                 .addContainerGap(137, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -87,11 +98,19 @@ public class manualesAyuda extends javax.swing.JFrame {
                 .addComponent(jLabel4)
                 .addGap(25, 25, 25)
                 .addComponent(jLabel5)
-                .addContainerGap(67, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addComponent(jButton_atrasCli)
+                .addGap(14, 14, 14))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton_atrasCliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_atrasCliActionPerformed
+        tallerBicicletas taller = new tallerBicicletas();
+        taller.setVisible(true);
+        this.setVisible(false);// TODO add your handling code here:
+    }//GEN-LAST:event_jButton_atrasCliActionPerformed
 
     /**
      * @param args the command line arguments
@@ -129,6 +148,7 @@ public class manualesAyuda extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton_atrasCli;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
