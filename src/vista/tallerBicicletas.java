@@ -10,9 +10,7 @@ package vista;
  */
 public class tallerBicicletas extends javax.swing.JFrame {
 
-    /**
-     * Creates new form estadoBicicletas
-     */
+   
     public tallerBicicletas() {
         initComponents();
     }

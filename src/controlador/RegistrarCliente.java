@@ -19,29 +19,28 @@ import modelo.Cliente;
  */
 public class RegistrarCliente {
 
-
-    public boolean RegistrarCliente(Cliente cli) { //la variable es cli, ya que antes se llamaba cliente y no donador, y eran muchos cli para cambiarlos.
+    public boolean RegistrarCliente(Cliente cli) {
         Connection cnx = null;
         try {
 
             //obtener conexión a la BD
             bd cbd = new bd();
             cnx = cbd.obtenerConeccion();
-           
-     
-       
-            String query = "INSERT INTO cliente(id, nombre,apellido,celular,modadlidad,modelo,tipoServicio,valor ) VALUES (?,?,?,?,?,?,?,?,?)";
+
+            String query = "INSERT INTO cliente(idCliente,nombre,apellido,celular,fecha,modalidad,modelo,tipoServicio,valor,estado ) VALUES (?,?,?,?,?,?,?,?,?,?)";
             try (PreparedStatement stmt = cnx.prepareStatement(query)) {
-                stmt.setInt(1, cli.getId());
+
+                stmt.setInt(1, cli.getIdCliente());
                 stmt.setString(2, cli.getNombre());
                 stmt.setString(3, cli.getApellido());
                 stmt.setInt(4, cli.getCelular());
-                stmt.setString(5, cli.getModalidad());
-                stmt.setString(6, cli.getModelo());
-                stmt.setString(7, cli.getTipoServicio());
-                stmt.setInt(8, cli.getCelular());
-                
-                
+                stmt.setDate(5, (java.sql.Date) cli.getFecha());
+                stmt.setString(6, cli.getModalidad());
+                stmt.setString(7, cli.getModelo());
+                stmt.setString(8, cli.getTipoServicio());
+                stmt.setInt(9, cli.getValor());
+                stmt.setString(10, cli.getEstado());
+
                 stmt.executeUpdate(); //inserta cliente
             }
             cnx.close();
@@ -79,7 +78,7 @@ public class RegistrarCliente {
         }
     }
 
-    //buscar todos los clientes
+    //Listar clientes
     public List<Cliente> listarClientes() {
         List<Cliente> lista = new ArrayList<>();
 
@@ -89,23 +88,27 @@ public class RegistrarCliente {
             bd cbd = new bd();
             cnx = cbd.obtenerConeccion();
 
-            String query = "SELECT id, nombre, apellido,celular,modadlidad,modelo,tipoServicio,valor FROM cliente order by id";
+            String query = "SELECT idCliente,nombre,apellido,celular,fecha,modalidad,modelo,tipoServicio,valor,estado FROM cliente order by idCliente";
             PreparedStatement stmt = cnx.prepareStatement(query);
 
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
                 Cliente cli = new Cliente();
-                
-             stmt.setInt(1, cli.getId());
-                stmt.setString(2, cli.getNombre());
-                stmt.setString(3, cli.getApellido());
-                stmt.setInt(4, cli.getCelular());
-                stmt.setString(5, cli.getModalidad());
-                stmt.setString(6, cli.getModelo());
-                stmt.setString(7, cli.getTipoServicio());
-                stmt.setInt(8, cli.getCelular());
-                
+
+             cli.setIdCliente(rs.getInt("idCliente"));
+             cli.setNombre(rs.getString("nombre"));
+             cli.setApellido(rs.getString("apellido"));
+             cli.setCelular(rs.getInt("celular"));
+             cli.setFecha(rs.getDate("fecha"));
+             cli.setModalidad(rs.getString("modalidad"));
+             cli.setModelo(rs.getString("modelo"));
+             cli.setTipoServicio(rs.getString("tipoServicio"));
+             cli.setValor(rs.getInt("valor"));
+             cli.setEstado(rs.getString("estado"));
+            
+             
+
 
                 lista.add(cli);
             }
@@ -120,32 +123,37 @@ public class RegistrarCliente {
         return lista;
     }
 
-    //buscar por tipo de sangre
-    public List<Cliente> buscarTodosServicios(String tipoServicio) {
+    //buscar por fecha
+    public List<Cliente> buscarPorModalidad(String modalidad) {
         List<Cliente> lista = new ArrayList<>();
 
         Connection cnx = null;
         try {
 
-             bd cbd = new bd();
+            bd cbd = new bd();
             cnx = cbd.obtenerConeccion();
 
-            String query = "SELECT rut_cliente, nombre, appaterno, apmaterno, calular FROM cliente WHERE tiposangre = ? order by rut_cliente";
+            String query = "SELECT idCliente,nombre,apellido,celular,fecha,modalidad,modelo,tipoServicio,valor,estado  FROM cliente WHERE modalidad = ? order by idCliente ";
             PreparedStatement stmt = cnx.prepareStatement(query);
+    
 
-            stmt.setString(1, tipoServicio);
+       stmt.setString(1, modalidad);
 
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
                 Cliente cli = new Cliente();
 
-                cli.setRut_cliente(rs.getString("rut_cliente"));
-                cli.setNombre(rs.getString("nombre"));
-                cli.setAppaterno(rs.getString("appaterno"));
-                cli.setApmaterno(rs.getString("apmaterno"));
-                cli.setCelular(rs.getInt("celular"));
-                cli.setTipoSangre(rs.getString("tiposangre"));
+           cli.setIdCliente(rs.getInt("idCliente"));
+             cli.setNombre(rs.getString("nombre"));
+             cli.setApellido(rs.getString("apellido"));
+             cli.setCelular(rs.getInt("celular"));
+             cli.setFecha(rs.getDate("fecha"));
+             cli.setModalidad(rs.getString("modalidad"));
+             cli.setModelo(rs.getString("modelo"));
+             cli.setTipoServicio(rs.getString("tipoServicio"));
+             cli.setValor(rs.getInt("valor"));
+             cli.setEstado(rs.getString("estado"));
 
                 lista.add(cli);
             }
@@ -153,13 +161,10 @@ public class RegistrarCliente {
             stmt.close();
             cnx.close();
         } catch (SQLException e) {
-            System.out.println("Error SQL al listar Donador/Cliente por Tipo de Sangre" + e.getMessage());
+            System.out.println("Error SQL al listar Cliente por fecha" + e.getMessage());
         } catch (Exception e) {
-            System.out.println("Error al mostrar Donador/Cliente por Tipo de Sangre" + e.getMessage());
+            System.out.println("Error al mostrar Cliente por fecha" + e.getMessage());
         }
         return lista;
     }
 }
-
-    
-

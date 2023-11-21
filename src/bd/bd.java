@@ -30,7 +30,7 @@ public class bd {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             cnx = DriverManager.getConnection(url, usu, pass);
-            System.out.println("Conexión exitosa");
+            System.out.println("Conexion exitosa");
         } catch (Exception e) {
             System.out.println("NO se pudo conectar: " + e.getMessage());
         }

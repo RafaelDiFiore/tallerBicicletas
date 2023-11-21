@@ -4,6 +4,14 @@
  */
 package vista;
 
+import controlador.RegistrarCliente;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+import modelo.Cliente;
+
 /**
  *
  * @author Rafael Diaz
@@ -27,6 +35,12 @@ public class listarClientes extends javax.swing.JFrame {
     private void initComponents() {
 
         jButton_atrasCli = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tablaClientes = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        listaModalidad = new javax.swing.JComboBox<>();
+        btnBuscar = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -37,21 +51,82 @@ public class listarClientes extends javax.swing.JFrame {
             }
         });
 
+        tablaClientes.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "ID Cliente", "Nombre", "Celular", "Fecha", "Modalidad", "Modelo", "Tipo de servicio", "Valor", "Estado"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tablaClientes);
+
+        jLabel1.setText("Buscar por modalidad");
+
+        listaModalidad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "MTB", "XC", "Downhill", "Enduro", "Fixie", "Ruta", "Fatbike", "E-bike", "BMX", "Cruiser", "Old School", "Otro" }));
+        listaModalidad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                listaModalidadActionPerformed(evt);
+            }
+        });
+
+        btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setFont(new java.awt.Font("Bahnschrift", 0, 24)); // NOI18N
+        jLabel2.setText("Listado de clientes");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton_atrasCli)
-                .addContainerGap(322, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton_atrasCli)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(12, 12, 12)
+                                .addComponent(listaModalidad, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnBuscar))))
+                        .addGap(0, 107, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(271, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(listaModalidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBuscar))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jButton_atrasCli)
-                .addContainerGap())
+                .addGap(9, 9, 9))
         );
 
         pack();
@@ -62,6 +137,51 @@ public class listarClientes extends javax.swing.JFrame {
         taller.setVisible(true);
         this.setVisible(false);// TODO add your handling code here:
     }//GEN-LAST:event_jButton_atrasCliActionPerformed
+
+    private void listaModalidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listaModalidadActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_listaModalidadActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        int idCliente;
+        String nombre, apellido = null;
+        String estado = null;
+        int celular;
+        Date fecha;
+        String modalidad, modelo;
+        String tipoServicio;
+        int valor;
+        String filtroModalidad;
+
+        List<Cliente> lista = new ArrayList<>();
+
+        filtroModalidad = listaModalidad.getSelectedItem().toString();
+        RegistrarCliente rc = new RegistrarCliente();
+
+        if (filtroModalidad.equals("Todos")) {
+            lista = rc.listarClientes();
+        } else {
+            lista = rc.buscarPorModalidad(filtroModalidad);
+        }
+
+        DefaultTableModel tabla = (DefaultTableModel) tablaClientes.getModel();
+        tabla.setRowCount(0);
+
+        for (Cliente tmp : lista) {
+            idCliente = tmp.getIdCliente();
+            nombre = tmp.getNombre();
+            nombre = tmp.getApellido();
+            celular = tmp.getCelular();
+            fecha = tmp.getFecha();
+            modalidad = tmp.getModalidad();
+            modelo = tmp.getModelo();
+            tipoServicio = tmp.getTipoServicio();
+            valor = tmp.getValor();
+            tipoServicio = tmp.getEstado();
+
+           tabla.addRow(new Object[]{idCliente, nombre,apellido,celular,fecha,modalidad,modelo,tipoServicio,valor});
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_btnBuscarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -99,6 +219,12 @@ public class listarClientes extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBuscar;
     private javax.swing.JButton jButton_atrasCli;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JComboBox<String> listaModalidad;
+    private javax.swing.JTable tablaClientes;
     // End of variables declaration//GEN-END:variables
 }

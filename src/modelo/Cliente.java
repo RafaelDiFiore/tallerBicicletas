@@ -4,38 +4,45 @@
  */
 package modelo;
 
+import java.util.Date;
+
 /**
  *
  * @author Rafael Diaz
  */
 public class Cliente {
-    private int id; 
-    private String nombre,apellido;
+private int idCliente;
+    private String nombre, apellido;
     private int celular;
-    private String modalidad,modelo;
-    private String tipoServicio; //R: reparacion M: Mantencion
+    private Date fecha;
+    private String modalidad, modelo;
+    private String tipoServicio;
     private int valor;
+    private String estado; //entregado, en servicio 
 
     public Cliente() {
-    }   
+        
+    }
 
-    public Cliente(int id, String nombre, String apellido, int celular, String modalidad, String modelo, String tipoServicio, int valor) {
-        this.id = id;
+    public Cliente(int idCliente, String nombre, String apellido, int celular, Date fecha, String modalidad, String modelo, String tipoServicio, int valor, String estado) {
+        this.idCliente = idCliente;
         this.nombre = nombre;
         this.apellido = apellido;
         this.celular = celular;
+        this.fecha = fecha;
         this.modalidad = modalidad;
         this.modelo = modelo;
         this.tipoServicio = tipoServicio;
         this.valor = valor;
+        this.estado = estado;
     }
 
-    public int getId() {
-        return id;
+    public int getIdCliente() {
+        return idCliente;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIdCliente(int idCliente) {
+        this.idCliente = idCliente;
     }
 
     public String getNombre() {
@@ -60,6 +67,14 @@ public class Cliente {
 
     public void setCelular(int celular) {
         this.celular = celular;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
     }
 
     public String getModalidad() {
@@ -94,9 +109,11 @@ public class Cliente {
         this.valor = valor;
     }
 
-    @Override
-    public String toString() {
-        return "Cliente{" + "id=" + id + ", nombre=" + nombre + ", apellido=" + apellido + ", celular=" + celular + ", modalidad=" + modalidad + ", modelo=" + modelo + ", tipoServicio=" + tipoServicio + ", valor=" + valor + '}';
+    public String getEstado() {
+        return estado;
     }
 
-  }   
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+}
