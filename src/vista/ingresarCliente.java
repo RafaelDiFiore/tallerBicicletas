@@ -335,66 +335,96 @@ public class ingresarCliente extends javax.swing.JFrame {
         taller.setVisible(true);
         this.setVisible(false);// TODO add your handling code here:
     }//GEN-LAST:event_jButton_atrasCliActionPerformed
-private void limpiarcajas (){
-    {   
-        txtidCliente.setText("");                             
-        txtNombre.setText("");
-        txtApellido.setText("");
-        txtCelular.setText("");
-        txtModelo.setText("");
-       // txtModalidad.setText("");
-        txtServicio.setText("");
-        txtValor.setText("");
-        calendario.cleanup();
-    }                                          
+    private void limpiarcajas() {
+        {
+            txtidCliente.setText("");
+            txtNombre.setText("");
+            txtApellido.setText("");
+            txtCelular.setText("");
+            txtModelo.setText("");
+            listaModalidad.setSelectedIndex(0);
+            txtServicio.setText("");
+            txtValor.setText("");
+            calendario.cleanup();
+        }
 
-};
+    }
+
+    ;
     private void btnRegistoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistoActionPerformed
-        int idCliente =0;
+        
+        int idCliente = 0;
         String nombre, apellido;
         String estado = null;
         int celular;
-        String fecha=((JTextField)calendario.getDateEditor().getUiComponent()).getText();
+        String fecha = ((JTextField) calendario.getDateEditor().getUiComponent()).getText();
         String modalidad, modelo;
         String tipoServicio;
         int valor;
-        
 
-      
+        //valores
         
         nombre = txtNombre.getText();
         apellido = txtApellido.getText();
         celular = Integer.parseInt(txtCelular.getText());
-        
         modalidad = listaModalidad.getSelectedItem().toString();
         modelo = txtModelo.getText();
         tipoServicio = txtServicio.getText();
         valor = Integer.parseInt(txtValor.getText());
-       
-       
-    // Date.valueOf(fecha)
+
+        // Validación de números
+        
+        try {
+            celular = Integer.parseInt(txtCelular.getText());
+            valor = Integer.parseInt(txtValor.getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Ingrese valores numéricos válidos para celular y valor", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         //registrar en bd 
-        Cliente cli = new Cliente(idCliente ++, nombre, apellido, celular, Date.valueOf(fecha), modalidad, modelo, tipoServicio, valor, "En servicio");
+        
+        Cliente cli = new Cliente(idCliente, nombre, apellido, celular, Date.valueOf(fecha), modalidad, modelo, tipoServicio, valor, "En servicio");
         RegistrarCliente rc = new RegistrarCliente();
+
+        // Validación de campos vacíos
+        
+        if (nombre.isEmpty() || apellido.isEmpty() || txtCelular.getText().isEmpty() || fecha.isEmpty()
+                || modalidad.isEmpty() || modelo.isEmpty() || tipoServicio.isEmpty() || txtValor.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+// Validación de fecha
+
+        try {
+            Date.valueOf(fecha);
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this, "Ingrese una fecha válida", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        
+        
         if (rc.RegistrarCliente(cli)) {
             JOptionPane.showMessageDialog(this, "Se agregó el cliente", "Información", JOptionPane.INFORMATION_MESSAGE);
             limpiarcajas();
         } else {
             JOptionPane.showMessageDialog(this, "NO se agregó cliente", "Error", JOptionPane.ERROR_MESSAGE);
-            
+
         }
 
     }//GEN-LAST:event_btnRegistoActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+        txtidCliente.setText("");
         txtNombre.setText("");
         txtApellido.setText("");
         txtCelular.setText("");
         txtModelo.setText("");
-        //boxModalidad
+        listaModalidad.setSelectedIndex(0);
         txtServicio.setText("");
         txtValor.setText("");
-        calendario.cleanup();
+        calendario.setDate(null);
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void txtidClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtidClienteActionPerformed
